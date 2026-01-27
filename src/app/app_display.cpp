@@ -9,18 +9,18 @@ namespace
 constexpr uint32_t kFrameIntervalMs = 500; // Draw at 2 FPS by default
 }
 
-AppDisplay::AppDisplay() : AppBase("display_app")
+AppDisplay::AppDisplay() : AppBase("app_display")
 {
 }
 
 void AppDisplay::onSetup()
 {
-    SimpleLog::info("[AppDisplay] setup");
+    SimpleLog::info(getName(), "onSetup");
 }
 
 void AppDisplay::onResume()
 {
-    SimpleLog::info("[AppDisplay] resume");
+    SimpleLog::info(getName(), "onResume");
     _last_draw_ms = millis();
 }
 
@@ -38,15 +38,15 @@ void AppDisplay::onRunning()
 
 void AppDisplay::onPause()
 {
-    SimpleLog::info("[AppDisplay] pause");
+    SimpleLog::info(getName(), "onPause");
 }
 
 void AppDisplay::onDestroy()
 {
-    SimpleLog::info("[AppDisplay] destroy");
+    SimpleLog::info(getName(), "onDestroy");
 }
 
 void AppDisplay::drawFrame()
 {
-    SimpleLog::info("[AppDisplay] drawing frame");
+    SimpleLog::info(getName(), "drawFrame");
 }
