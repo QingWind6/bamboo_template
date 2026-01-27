@@ -1,56 +1,25 @@
 #include <Arduino.h>
 
-void printMemoryStatus()
-{
-    // -- DRAM (Internal Heap) status -- //
-    size_t heapTotal = ESP.getHeapSize();        // Total heap area size (bytes)
-    size_t heapFree = ESP.getFreeHeap();         // Free heap size (bytes)
-    size_t heapMaxBlock = ESP.getMaxAllocHeap(); // Largest single allocatable heap block (bytes)
-    size_t heapUsed = heapTotal - heapFree;      // Used heap size (bytes)
+#include "app/app_display.h"
+#include "app_manager.h"
+#include "utils/utils.h"
 
-    // -- PSRAM section (if available) -- //
-    size_t psramTotal = ESP.getPsramSize(); // Total external PSRAM size (bytes), 0 if unsupported
-    size_t psramFree = 0;
-    size_t psramMaxBlock = 0;
-    size_t psramUsed = 0;
-    if (psramTotal > 0)
-    {
-        psramFree = ESP.getFreePsram();         // Free PSRAM size (bytes)
-        psramMaxBlock = ESP.getMaxAllocPsram(); // Largest single allocatable PSRAM block (bytes)
-        psramUsed = psramTotal - psramFree;     // Used PSRAM size (bytes)
-    }
+#include "simplelog.h"
 
-    // Print header
-    Serial.println("Memory Status:");
-    Serial.printf("    %-12s  /  %-12s  /  %-12s  /  %-12s\n", "Max Alloc", "Used", "Free", "Total");
-    Serial.println("  DRAM:");
-    Serial.printf("    [%10u B /%10u B /%10u B /%10u B]\n", heapMaxBlock, heapUsed, heapFree, heapTotal);
-
-    // If PSRAM is available, print PSRAM stats
-    if (psramTotal > 0)
-    {
-        Serial.println("  PSRAM:");
-        Serial.printf("    [%10u B /%10u B /%10u B /%10u B]\n", psramMaxBlock, psramUsed, psramFree, psramTotal);
-    }
-    else
-    {
-        Serial.println("  PSRAM: Unavailable");
-    }
-
-    Serial.println();
-}
+SemaphoreHandle_t logMutex;
+static AppManager g_app_manager;
 
 void __app_device_info_task(void *pvParameters)
 {
     while (1)
     {
-        Serial.println("[BSP] Device info:");
+        SimpleLog::error("[BSP] Device info:");
         vTaskDelay(2000);
     }
     vTaskDelete(NULL);
 }
 
-void _app_info_printer_task(void *pvParameters)
+void __app_info_printer_task(void *pvParameters)
 {
     while (1)
     {
@@ -60,18 +29,37 @@ void _app_info_printer_task(void *pvParameters)
     vTaskDelete(NULL);
 }
 
+void setup_logging() {
+    logMutex = xSemaphoreCreateMutex();
+
+    SimpleLog::setLock(
+        []() { xSemaphoreTake(logMutex, portMAX_DELAY); },
+        []() { xSemaphoreGive(logMutex); }
+    );
+
+    // 3. 注入输出和时间
+    SimpleLog::setOutput([](std::string_view msg){
+        printf("%.*s", static_cast<int>(msg.size()), msg.data());
+    });
+    SimpleLog::setTime([](){ return (uint32_t)esp_timer_get_time() / 1000; }); // 微秒转毫秒
+}
+
 void setup()
 {
     Serial.begin(115200);
-    Serial.println("Hello, world!");
+    setup_logging();
+
+    SimpleLog::info("Hello, world!");
+
+    auto *display_app = new AppDisplay();
+    g_app_manager.startApp(display_app);
 
     xTaskCreatePinnedToCore(__app_device_info_task, "app_device_info", 4096, NULL, 5, NULL, 0);
-
-    xTaskCreatePinnedToCore(_app_info_printer_task, "app_info_printer", 4096, NULL, 5, NULL, 0);
+    xTaskCreatePinnedToCore(__app_info_printer_task, "app_info_printer", 4096, NULL, 5, NULL, 0);
 }
 
 void loop()
 {
-    Serial.println("Hello, Bamboo!");
-    delay(1000);
+    g_app_manager.update();
+    vTaskDelay(20);
 }
