@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "Arduino.h"
+#include "simplelog.h"
 
 void printMemoryStatus()
 {
@@ -22,21 +23,21 @@ void printMemoryStatus()
     }
 
     // Print header
-    Serial.println("Memory Status:");
-    Serial.printf("    %-12s  /  %-12s  /  %-12s  /  %-12s\n", "Max Alloc", "Used", "Free", "Total");
-    Serial.println("  DRAM:");
-    Serial.printf("    [%10u B /%10u B /%10u B /%10u B]\n", heapMaxBlock, heapUsed, heapFree, heapTotal);
+    SimpleLog::info("Memory Status:");
+    SimpleLog::info("    {:<12}  /  {:<12}  /  {:<12}  /  {:<12}", "Max Alloc", "Used", "Free", "Total");
+    SimpleLog::info("  DRAM:");
+    SimpleLog::info("    [{:>10} B /{:>10} B /{:>10} B /{:>10} B]", heapMaxBlock, heapUsed, heapFree, heapTotal);
 
     // If PSRAM is available, print PSRAM stats
     if (psramTotal > 0)
     {
-        Serial.println("  PSRAM:");
-        Serial.printf("    [%10u B /%10u B /%10u B /%10u B]\n", psramMaxBlock, psramUsed, psramFree, psramTotal);
+        SimpleLog::info("  PSRAM:");
+        SimpleLog::info("    [{:>10} B /{:>10} B /{:>10} B /{:>10} B]", psramMaxBlock, psramUsed, psramFree, psramTotal);
     }
     else
     {
-        Serial.println("  PSRAM: Unavailable");
+        SimpleLog::info("  PSRAM: Unavailable");
     }
 
-    Serial.println();
+    SimpleLog::info("");
 }
