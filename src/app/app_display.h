@@ -1,23 +1,17 @@
 #pragma once
 
-#include <cstdint>
+#include "bambooloop.h"
 
-#include "app_base.h"
-
-class AppDisplay : public AppBase
-{
+class AppDisplay : public AppBase {
 public:
     AppDisplay();
     ~AppDisplay() override = default;
 
     void onSetup() override;
-    void onResume() override;
     void onRunning() override;
-    void onPause() override;
     void onDestroy() override;
+    std::string getName() const { return _app_name; }
 
 private:
-    uint32_t _last_draw_ms = 0;
-
-    void drawFrame();
+    std::string _app_name;
 };

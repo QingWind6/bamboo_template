@@ -1,6 +1,6 @@
 #pragma once
 
-#include "app_manager.h"
+#include "bambooloop.h"
 
 class AppDeviceInfo : public AppBase {
 public:
@@ -9,10 +9,11 @@ public:
 
     void onSetup() override;
     void onRunning() override;
-    void onPause() override;
-    void onResume() override;
     void onDestroy() override;
 
+    std::string getName() const { return _app_name; }
+
 private:
-    
+    std::string _app_name;
+    uint32_t _last_update_ms = 0;
 };
