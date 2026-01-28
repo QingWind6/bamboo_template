@@ -13,7 +13,7 @@ void __app_device_info_task(void *pvParameters)
 {
     while (1)
     {
-        SimpleLog::error("[BSP] Device info:");
+        SimpleLog::warn("BSP", "Device info:");
         vTaskDelay(2000);
     }
     vTaskDelete(NULL);
@@ -46,7 +46,8 @@ void setup_logging() {
 
 void setup()
 {
-    Serial.begin(115200);
+    // Serial.begin(115200);
+    vTaskDelay(3000);
     setup_logging();
 
     SimpleLog::info("Hello, world!");
