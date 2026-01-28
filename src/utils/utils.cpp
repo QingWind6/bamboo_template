@@ -24,15 +24,15 @@ void printMemoryStatus()
 
     // Print header
     SimpleLog::info("Memory Status:");
-    SimpleLog::info("    {:<12}  /  {:<12}  /  {:<12}  /  {:<12}", "Max Alloc", "Used", "Free", "Total");
+    SimpleLog::infof("    {:<12}  /  {:<12}  /  {:<12}  /  {:<12}", "Max Alloc", "Used", "Free", "Total");
     SimpleLog::info("  DRAM:");
-    SimpleLog::info("    [{:>10} B /{:>10} B /{:>10} B /{:>10} B]", heapMaxBlock, heapUsed, heapFree, heapTotal);
+    SimpleLog::infof("    [{:>10} B /{:>10} B /{:>10} B /{:>10} B]", heapMaxBlock, heapUsed, heapFree, heapTotal);
 
     // If PSRAM is available, print PSRAM stats
     if (psramTotal > 0)
     {
         SimpleLog::info("  PSRAM:");
-        SimpleLog::info("    [{:>10} B /{:>10} B /{:>10} B /{:>10} B]", psramMaxBlock, psramUsed, psramFree, psramTotal);
+        SimpleLog::infof("    [{:>10} B /{:>10} B /{:>10} B /{:>10} B]", psramMaxBlock, psramUsed, psramFree, psramTotal);
     }
     else
     {
