@@ -6,28 +6,30 @@
 #include "app/app_device_info.h"
 #include "app/app_display.h"
 
+#include "hal/hal_esp32.h"
+
 SemaphoreHandle_t logMutex;
 Scheduler bambooloop;
 
-void __app_device_info_task(void *pvParameters)
-{
-    while (1)
-    {
-        SimpleLog::warn("BSP", "Device info:");
-        vTaskDelay(2000);
-    }
-    vTaskDelete(NULL);
-}
+// void __app_device_info_task(void *pvParameters)
+// {
+//     while (1)
+//     {
+//         SimpleLog::warn("BSP", "Device info:");
+//         vTaskDelay(2000);
+//     }
+//     vTaskDelete(NULL);
+// }
 
-void __app_info_printer_task(void *pvParameters)
-{
-    while (1)
-    {
-        printMemoryStatus();
-        vTaskDelay(5000);
-    }
-    vTaskDelete(NULL);
-}
+// void __app_info_printer_task(void *pvParameters)
+// {
+//     while (1)
+//     {
+//         printMemoryStatus();
+//         vTaskDelay(5000);
+//     }
+//     vTaskDelete(NULL);
+// }
 
 void setup_logging() {
     logMutex = xSemaphoreCreateMutex();
@@ -54,15 +56,17 @@ void setup()
 
     SimpleLog::info("Hello, world!");
 
-    bambooloop.install<AppDeviceInfo>();
-    bambooloop.install<AppDisplay>();
+    // bambooloop.install<AppDeviceInfo>();
+    // bambooloop.install<AppDisplay>();
+    // xTaskCreatePinnedToCore(__app_device_info_task, "app_device_info", 4096, NULL, 5, NULL, 0);
+    // xTaskCreatePinnedToCore(__app_info_printer_task, "app_info_printer", 4096, NULL, 5, NULL, 0);
 
-    xTaskCreatePinnedToCore(__app_device_info_task, "app_device_info", 4096, NULL, 5, NULL, 0);
-    xTaskCreatePinnedToCore(__app_info_printer_task, "app_info_printer", 4096, NULL, 5, NULL, 0);
+    HAL::Inject(std::make_unique<HalEsp32>());
+    float voltage = HAL::Get().GetBattery().readVoltage();
 }
 
 void loop()
 {
-    bambooloop.update();
-    vTaskDelay(10);
+    // bambooloop.update();
+    // vTaskDelay(10);
 }
