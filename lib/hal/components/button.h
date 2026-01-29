@@ -9,6 +9,14 @@ enum ButtonId_t{
 };
 }
 
+namespace ButtonEvent{
+enum ButtonEvent_t{
+    None = 0, 
+    click,
+    longpress
+};
+}
+
 namespace hal_components {
 
 class ButtonBase {

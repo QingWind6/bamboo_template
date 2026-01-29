@@ -21,6 +21,4 @@ public:
 
     virtual BatteryStatus::BatteryStatus_t getBatteryId(){ return BatteryStatus::None; }
 };
-
-
 }
