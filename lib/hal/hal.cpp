@@ -7,7 +7,7 @@
 
 #define LOG_TAG "HAL"
 
-using namespace HAL;
+namespace HAL {
 
 static std::unique_ptr<HalBase> g_hal = nullptr;
 
@@ -20,10 +20,10 @@ HalBase::~HalBase()
     SimpleLog::info(LOG_TAG, "HAL Destroyed");
 }
 
-// void HalBase::init()
-// {
-//     SimpleLog::log(LOG_TAG, "HalBase init");
-// }
+void HalBase::init()
+{
+    SimpleLog::info(LOG_TAG, "HalBase init");
+}
 
 hal_components::BatteryBase& HalBase::GetBattery()
 {
@@ -71,7 +71,7 @@ void Inject(std::unique_ptr<HalBase> hal)
     {
         Destroy();
         g_hal = std::move(hal);
-        SimpleLog::log(LOG_TAG, "Inject HAL: %s", g_hal->type().c_str());
+        SimpleLog::log(LogLevel::INFO, "[{}] Inject HAL: {}", LOG_TAG, g_hal->type());
         g_hal->init();
     }else
     {
@@ -93,7 +93,9 @@ void Destroy()
 {
     if(g_hal)
     {
-        SimpleLog::log(LOG_TAG, "Destroy HAL: %s", g_hal->type().c_str());
+        SimpleLog::log(LogLevel::INFO, "[{}] Destroy HAL: {}", LOG_TAG, g_hal->type());
         g_hal.reset();
     }
 }
+
+} // namespace HAL
