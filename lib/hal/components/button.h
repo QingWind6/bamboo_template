@@ -25,6 +25,7 @@ public:
 
     virtual void init(){}
     virtual void update(){}
+    virtual ButtonEvent::ButtonEvent_t get_event(ButtonId::ButtonId_t){ return ButtonEvent::None; }
 };
 
 
