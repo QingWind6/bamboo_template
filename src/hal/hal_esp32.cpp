@@ -18,6 +18,9 @@ void HalEsp32::init()
 
     epaper_ = std::make_unique<EpaperEsp32>();
     epaper_->init();
+
+    indicator_ = std::make_unique<IndicatorEsp32>();
+    indicator_->init();
 }
 
 void HalEsp32::update()
