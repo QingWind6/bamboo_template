@@ -117,7 +117,7 @@ bool BatteryEsp32::detect_battery_presence_by_ripple(int sampleCount,int interva
 bool BatteryEsp32::batteryadc_collect_samples(int sampleCount, int intervalMs, BatterySampleStats &stats)
 {
     digitalWrite(HAL_ADC_EN, HIGH);
-    delay(5);
+    vTaskDelay(1);
 
     stats.sumMv = 0;
     stats.minMv = INT_MAX;

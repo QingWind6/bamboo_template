@@ -63,11 +63,28 @@ void ButtonEsp32::set_event(ButtonId::ButtonId_t button_id, ButtonEvent::ButtonE
 
 ButtonEvent::ButtonEvent_t ButtonEsp32::get_event(ButtonId::ButtonId_t button_id)
 {
+    // Return the current event and clear it so it is edge-triggered.
     switch(button_id)
     {
-        case ButtonId::KEY0: return button1_event_;
-        case ButtonId::KEY1: return button2_event_;
-        case ButtonId::KEY2: return button3_event_;
-        default: return ButtonEvent::None;
+        case ButtonId::KEY0:
+        {
+            auto evt = button1_event_;
+            button1_event_ = ButtonEvent::None;
+            return evt;
+        }
+        case ButtonId::KEY1:
+        {
+            auto evt = button2_event_;
+            button2_event_ = ButtonEvent::None;
+            return evt;
+        }
+        case ButtonId::KEY2:
+        {
+            auto evt = button3_event_;
+            button3_event_ = ButtonEvent::None;
+            return evt;
+        }
+        default:
+            return ButtonEvent::None;
     }
 }
