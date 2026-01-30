@@ -15,7 +15,7 @@ void AppDisplay::onSetup() {
 }
 
 void AppDisplay::onRunning() {
-    SimpleLog::info(getName(), "running");
+    // SimpleLog::info(getName(), "running");
     static ButtonEvent::ButtonEvent_t button0_id = ButtonEvent::None;
     static ButtonEvent::ButtonEvent_t button1_id = ButtonEvent::None;
     static ButtonEvent::ButtonEvent_t button2_id = ButtonEvent::None;

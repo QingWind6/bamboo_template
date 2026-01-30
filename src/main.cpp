@@ -20,31 +20,29 @@ void setup_logging() {
         []() { xSemaphoreGive(logMutex); }
     );
 
-    // 3. 注入输出和时间
+    // inject output and time functions
     SimpleLog::setOutput([](std::string_view msg){
         printf("%.*s", static_cast<int>(msg.size()), msg.data());
     });
-    SimpleLog::setTime([](){ return (uint32_t)esp_timer_get_time() / 1000; }); // 微秒转毫秒
+    SimpleLog::setTime([](){ return (uint32_t)esp_timer_get_time() / 1000; }); // us2ms
     SimpleLog::setLevelTagEnabled(false);
 
 }
 
 void setup()
 {
-    vTaskDelay(3000);
+    delay(2000);
     setup_logging();
-
-    SimpleLog::info("Hello, world!");
-
-    bambooloop.install<AppDeviceInfo>();
-    bambooloop.install<AppDisplay>();
+    SimpleLog::info("Hello World!");
 
     HAL::Inject(std::make_unique<HalEsp32>());
-    float voltage = HAL::Get().GetBattery().readVoltage();
+    bambooloop.install<AppDeviceInfo>();
+    bambooloop.install<AppDisplay>();
 }
 
 void loop()
 {
+    HAL::Get().update();
     bambooloop.update();
     vTaskDelay(10);
 }
