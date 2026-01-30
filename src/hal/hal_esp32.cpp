@@ -15,6 +15,9 @@ void HalEsp32::init()
 
     battery_ = std::make_unique<BatteryEsp32>();
     battery_->init();
+
+    epaper_ = std::make_unique<EpaperEsp32>();
+    epaper_->init();
 }
 
 void HalEsp32::hal_test()
