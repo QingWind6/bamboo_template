@@ -34,6 +34,30 @@ void _button3_click()
     }
 }
 
+void _button1_longpress()
+{
+    if(g_button)
+    {
+        g_button->set_event(ButtonId::KEY0, ButtonEvent::longpress);
+    }
+}
+
+void _button2_longpress()
+{
+    if(g_button)
+    {
+        g_button->set_event(ButtonId::KEY1, ButtonEvent::longpress);
+    }
+}
+
+void _button3_longpress()
+{
+    if(g_button)
+    {
+        g_button->set_event(ButtonId::KEY2, ButtonEvent::longpress);
+    }
+}
+
 void ButtonEsp32::init()
 {
     SimpleLog::info("ButtonEsp32", "init");
@@ -41,6 +65,10 @@ void ButtonEsp32::init()
     button1.attachClick(_button1_click);
     button2.attachClick(_button2_click);
     button3.attachClick(_button3_click);
+    // Report a long press once when the threshold is reached (default 1s).
+    button1.attachLongPressStart(_button1_longpress);
+    button2.attachLongPressStart(_button2_longpress);
+    button3.attachLongPressStart(_button3_longpress);
 }
 
 void ButtonEsp32::update()
