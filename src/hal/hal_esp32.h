@@ -11,6 +11,8 @@ public:
 
     void init() override;
 
+    void update() override;
+
 private:
     void hal_test();
 

@@ -20,6 +20,12 @@ void HalEsp32::init()
     epaper_->init();
 }
 
+void HalEsp32::update()
+{
+    button_->update();
+    battery_->update();
+}
+
 void HalEsp32::hal_test()
 {
 
