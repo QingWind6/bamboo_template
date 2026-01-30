@@ -156,7 +156,7 @@ bool BatteryEsp32::batteryadc_sample_avg_mv(int &avgMv) {
     avgMv = stats.sumMv / NUM_SAMPLES;
     const int rangeMv = stats.maxMv - stats.minMv;
 
-    SimpleLog::log(LogLevel::DEBUG, "[{}] [ADC Avg] Avg: %d mV, Min: %d mV, Max: %d mV, Range: %d mV\n",BATTERY_LOG, avgMv, stats.minMv, stats.maxMv, rangeMv);
+    SimpleLog::log(LogLevel::DEBUG, "[{}] [ADC Avg] Avg: {} mV, Min: {} mV, Max: {} mV, Range: {} mV", BATTERY_LOG, avgMv, stats.minMv, stats.maxMv, rangeMv);
 
     return true;
 }
