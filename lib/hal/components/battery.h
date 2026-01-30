@@ -16,6 +16,7 @@ public:
     virtual ~BatteryBase() = default;
 
     virtual void init(){};
+    virtual void update() {}
     virtual float readVoltage(){ return 0.0f; }
     virtual float readPercentage(){ return 0.0f; }
 

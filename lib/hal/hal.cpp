@@ -11,19 +11,6 @@ namespace HAL {
 
 static std::unique_ptr<HalBase> g_hal = nullptr;
 
-HalBase::HalBase()
-{
-}
-
-HalBase::~HalBase()
-{
-    SimpleLog::info(LOG_TAG, "HAL Destroyed");
-}
-
-void HalBase::init()
-{
-    SimpleLog::info(LOG_TAG, "HalBase init");
-}
 
 hal_components::BatteryBase& HalBase::GetBattery()
 {

@@ -13,13 +13,14 @@ namespace HAL{
 
 class HalBase{
 public:
-    HalBase();
-    virtual ~HalBase();
+    HalBase(){};
+    virtual ~HalBase(){};
     // 返回当前 HAL 实现的类型名称，用于日志调试
     virtual std::string type() { return "HalBase"; }
 
     // 初始化 HAL 及其注册的组件
-    virtual void init();
+    virtual void init(){};
+    virtual void update(){};
 
     hal_components::BatteryBase& GetBattery();
     hal_components::ButtonBase& GetButton();
