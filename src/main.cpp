@@ -11,25 +11,6 @@
 SemaphoreHandle_t logMutex;
 Scheduler bambooloop;
 
-// void __app_device_info_task(void *pvParameters)
-// {
-//     while (1)
-//     {
-//         SimpleLog::warn("BSP", "Device info:");
-//         vTaskDelay(2000);
-//     }
-//     vTaskDelete(NULL);
-// }
-
-// void __app_info_printer_task(void *pvParameters)
-// {
-//     while (1)
-//     {
-//         printMemoryStatus();
-//         vTaskDelay(5000);
-//     }
-//     vTaskDelete(NULL);
-// }
 
 void setup_logging() {
     logMutex = xSemaphoreCreateMutex();
@@ -50,16 +31,13 @@ void setup_logging() {
 
 void setup()
 {
-    // Serial.begin(115200);
     vTaskDelay(3000);
     setup_logging();
 
     SimpleLog::info("Hello, world!");
 
-    // bambooloop.install<AppDeviceInfo>();
-    // bambooloop.install<AppDisplay>();
-    // xTaskCreatePinnedToCore(__app_device_info_task, "app_device_info", 4096, NULL, 5, NULL, 0);
-    // xTaskCreatePinnedToCore(__app_info_printer_task, "app_info_printer", 4096, NULL, 5, NULL, 0);
+    bambooloop.install<AppDeviceInfo>();
+    bambooloop.install<AppDisplay>();
 
     HAL::Inject(std::make_unique<HalEsp32>());
     float voltage = HAL::Get().GetBattery().readVoltage();
@@ -67,6 +45,6 @@ void setup()
 
 void loop()
 {
-    // bambooloop.update();
-    // vTaskDelay(10);
+    bambooloop.update();
+    vTaskDelay(10);
 }

@@ -2,6 +2,8 @@
 #include "simplelog.h"
 #include <Arduino.h>
 
+#include "hal/hal_esp32.h"
+
 AppDeviceInfo::AppDeviceInfo() { _app_name = "AppDeviceInfo"; }
 
 void AppDeviceInfo::onSetup() {
@@ -16,7 +18,9 @@ void AppDeviceInfo::onRunning() {
     }
     _last_update_ms = now;
 
-    SimpleLog::info(getName(), "running");
+    // SimpleLog::info(getName(), "running");
+    float voltage = HAL::Get().GetBattery().readVoltage();
+    SimpleLog::log(LogLevel::INFO, "Battery voltage: {:.2f} V", voltage);
 }
 
 void AppDeviceInfo::onDestroy() {
